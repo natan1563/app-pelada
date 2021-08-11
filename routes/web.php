@@ -16,3 +16,17 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => '/api'], function() use ($router) {
+
+    $router->post('/login', 'UsuarioController@login');
+
+    $router->post('/cadastro/usuario', 'UsuarioController@store');
+
+    $router->post('/cadastro/pelada', 'PeladaController@store');
+
+    $router->put('/vinculo/pelada/{id_pelada}', 'PeladaController@update');
+
+    $router->put('/pelada/convite/{id_usuario}', 'PeladaController@inviteToPelada');
+
+});
