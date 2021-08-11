@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Model
 {
-    use Authenticatable, Authorizable, HasFactory;
+
 
     /**
      * The attributes that are mass assignable.
@@ -19,8 +19,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'nomeCompleto', 'apelido', 'email', 'senha'
     ];
+
+    public $timestamps = false;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -30,4 +32,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    protected $table = 'usuarios';
 }
