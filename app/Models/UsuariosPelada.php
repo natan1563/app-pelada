@@ -6,25 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsuariosPelada extends Model
 {
+
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'nomeEvento',
-        'data',
-        'hora',
-        'local'
-    ];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
+        'idUsuario',
+        'idPelada',
+        'convidado'
     ];
 
     protected $table = 'usuarios_pelada';
