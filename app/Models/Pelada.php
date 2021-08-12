@@ -6,13 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pelada extends Model
 {
+
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'nomeEvento', 'data', 'hora', 'local'
+        'nomeEvento',
+        'data',
+        'hora',
+        'local'
     ];
 
     /**
