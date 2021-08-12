@@ -23,8 +23,8 @@ $router->group(['prefix' => '/api'], function() use ($router) {
 
     $router->post('cadastro/usuario', 'UsuarioController@store');
 
+    $router->get('peladas', 'PeladaController@index');
     $router->group(['middleware' => 'autenticador'], function () use ($router) {
-        $router->get('peladas', 'PeladaController@index');
 
         $router->post('cadastro/pelada', 'PeladaController@store');
 

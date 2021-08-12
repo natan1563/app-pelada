@@ -15,7 +15,7 @@ class UsuarioController extends Controller
     {
         $usuario = User::where('email', $request->email)->first();
 
-        if (is_null($usuario) || Hash::check($request->senha, $usuario->senha)) {
+        if (is_null($usuario) || !Hash::check($request->senha, $usuario->senha)) {
             return response()->json(
                 [
                     'auth'    => false,
@@ -31,7 +31,8 @@ class UsuarioController extends Controller
             ], 200);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
             $this->validate($request, [
                 'nomeCompleto' => 'required',
@@ -40,12 +41,16 @@ class UsuarioController extends Controller
                 'senha'        => 'required'
             ]);
 
-            User::create($request->all());
-            return response()->json('Usuario criado com sucesso', 201);
+            $usuario = new User;
+            $usuario->nomeCompleto = $request->nomeCompleto;
+            $usuario->apelido      = $request->apelido;
+            $usuario->email        = $request->email;
+            $usuario->senha        = Hash::make($request->senha);
 
+            $usuario->save();
+            return response()->json('Usuario criado com sucesso', 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);
         }
-
     }
 }

@@ -17,7 +17,7 @@ class Usuarios extends Migration
             $table->bigIncrements('id');
             $table->string('nomeCompleto');
             $table->string('apelido');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('senha');
         });
     }
