@@ -18,8 +18,7 @@ class PeladaController extends Controller
    {
        $this->validate($request, [
             'nomeEvento' => 'required',
-            'data'       => 'required',
-            'hora'       => 'required',
+            'data_hora'  => 'required',
             'local'      => 'required'
        ]);
 
