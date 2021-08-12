@@ -13,11 +13,12 @@ class Pelada extends Migration
      */
     public function up()
     {
-        Schema::create('pelada', function (Blueprint $table) {
+        Schema::create('peladas', function (Blueprint $table) {
             $table->bigIncrements('idPelada');
             $table->string('nomeEvento');
-            $table->date('data')->date_format('d-m-Y');
-            $table->date('hora')->date_format('H:i:s');
+            $table->dateTime('data_hora')
+                ->date_format('Y-m-d H:i')
+                ->default(date('Y-m-d H:i'));
             $table->string('local');
         });
     }
