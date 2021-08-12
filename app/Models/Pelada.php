@@ -16,8 +16,7 @@ class Pelada extends Model
      */
     protected $fillable = [
         'nomeEvento',
-        'data',
-        'hora',
+        'data_hora',
         'local'
     ];
 
