@@ -23,12 +23,18 @@ $router->group(['prefix' => '/api'], function() use ($router) {
 
     $router->post('cadastro/usuario', 'UsuarioController@store');
 
-    $router->post('cadastro/pelada', 'PeladaController@store');
+    $router->group(['middleware' => 'autenticador'], function () use ($router) {
+        $router->get('peladas', 'PeladaController@index');
 
-    $router->get('peladas', 'PeladaController@index');
+        $router->post('cadastro/pelada', 'PeladaController@store');
 
-    $router->post('vinculo/pelada/{id_pelada}', 'PeladaController@update');
+        $router->post('vinculo/pelada', 'PeladaUsuarioController@store');
 
-    $router->put('pelada/convite/{id_usuario}', 'PeladaController@inviteToPelada');
+        $router->put('vinculo/pelada/{id}', 'PeladaUsuarioController@update');
+
+        $router->delete('vinculo/pelada/{id}', 'PeladaUsuarioController@cancel');
+
+        $router->post('pelada/convite', 'PeladaUsuarioController@convidaPelada');
+    });
 
 });
