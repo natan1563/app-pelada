@@ -6,5 +6,5 @@
 - Verificar credenciais de acesso a base de dados no .env
 - Importar base de dados (api/database/app_pelada) para o seu SGBD 
 - Subir o servidor de banco de dados.
-- Rodar o comando: ``php artisan migrate``
-- Rodar os comandos: ``cd ..``  ``php -S localhost:8080 -t public``
+- Rodar os comandos: ``php artisan migrate`` ``php -S localhost:8080 -t public``
+- Rodar os comandos: ``cd ..`` ``php -S localhost:5050 -t public``
