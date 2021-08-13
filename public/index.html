@@ -17,7 +17,7 @@
                        <h1>Login</h1>
                    </div>
 
-                   <div v-if="usuario.auth === false" class="row alert-danger text-center p-3">
+                   <div v-if="login.message" class="row alert-danger text-center p-3">
                         <p class="my-auto">{{ login.message }}</p>
                    </div>
 
@@ -70,7 +70,8 @@
             </form>
 
             <!-- Cadastro de peladas -->
-            <form v-if="userAuthenticated" @submit.prevent="createPeladas" class="d-flex flex-column align-items-center">
+            <form v-if="userAuthenticated || !usuario.auth" @submit.prevent="createPeladas" class="d-flex flex-column align-items-center">
+
                 <div class="row mt-3">
                     <h1>Agendar pelada</h1>
                 </div>
@@ -94,11 +95,13 @@
                          <label for="setLocale" class="text-primary mb-2">Local:</label>
                          <input type="text" class="form-control" v-model="criarPelada.local" name="setLocale" id="setLocale" required>
                          <button class="btn btn-outline-info mt-3 col-md-6 mx-auto">Agendar pelada</button>
+                         <button class="btn btn-outline-danger mt-3 col-md-6 mx-auto" @click.prevent="logout">Sair</button>
+
                      </div>
                  </div>
             </form>
 
-            <table v-if="userAuthenticated" class="table mt-5 text-center">
+            <table v-if="userAuthenticated || !usuario.auth" class="table mt-5 text-center">
                 <h1 class="text-center mt-5">Lista de peladas</h1>
                 <thead>
                   <tr>
@@ -161,13 +164,23 @@
                 peladas: {}
             },
 
+           watch: {
+                authenticated: function() {
+                    this.userAuthenticated();
+                }
+           },
+
            computed: {
                 hasTokenValid() {
-                    return (this.usuario.token.length > 0);
+                    const appToken = localStorage.getItem('App-token')
+                    return (appToken.length > 0);
                 },
 
                 userAuthenticated() {
-                    return (typeof this.usuario.auth == "boolean" && this.usuario.auth);
+                    this.isAuthenticable();
+                    if (this.usuario.token &&  this.usuario.auth == 'true') return true;
+
+                    return this.logout();
                 },
 
                 verifyPeladas() {
@@ -179,11 +192,13 @@
                 loginUser() {
                     axios.post(this.apiUrl + '/login', {email: this.login.email, senha: this.login.senha})
                     .then(jsonResponse => {
-                        if (!jsonResponse.data.auth) throw 'Usuário ou senha inválidos.';
-                        this.usuario.auth    = jsonResponse.data.auth;
-                        this.login.message = jsonResponse.data.message;
-                        this.usuario.token = jsonResponse.data.access_token;
 
+                        if (!jsonResponse.data.auth) throw 'Usuário ou senha inválidos.';
+
+                        localStorage.setItem('Auth', jsonResponse.data.auth);
+                        localStorage.setItem('App-token', jsonResponse.data.access_token);
+
+                        this.isAuthenticable();
                         this.requestPeladas();
                     })
                     .catch(error => {
@@ -213,13 +228,13 @@
                 requestPeladas() {
                     axios.get(this.apiUrl + '/peladas', {
                         headers: {
-                            'Authorization': this.usuario.token
+                            'Authorization': localStorage.getItem('App-token')
                         }
                     })
                     .then(jsonResponse => {
                         this.peladas = JSON.parse(jsonResponse.request.response);
                     })
-                    .catch(error =>console.log('deu ruim'));
+                    .catch(error =>console.log(error));
                 },
 
                 createPeladas() {
@@ -233,7 +248,7 @@
                     axios.post(this.apiUrl + '/cadastro/pelada', rawPeladas,
                     {
                         headers: {
-                            'Authorization': this.usuario.token
+                            'Authorization': localStorage.getItem('App-token')
                         }
                     }
                     )
@@ -241,13 +256,22 @@
                         if (!jsonResponse) throw "Erro ao cadastrar";
                         this.criarPelada.created = true;
                         this.criarPelada.message = 'Pelada criada com sucesso';
+                        this.peladas = jsonResponse.data.peladas;
                     })
                     .catch(error => console.log(error));
+                },
+
+                isAuthenticable() {
+                    this.usuario.auth = localStorage.getItem('Auth');
+                    this.usuario.token = localStorage.getItem('App-token');
+                },
+
+                logout() {
+                    localStorage.clear();
+                    this.usuario.auth = false;
                 }
             }
         });
-
-        console.log(vm);
     </script>
 
     <style scoped>

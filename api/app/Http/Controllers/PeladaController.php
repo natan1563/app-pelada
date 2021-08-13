@@ -25,7 +25,8 @@ class PeladaController extends Controller
        Pelada::create($request->all());
 
        return response()->json([
-           'pelada_criada' => true
+           'pelada_criada' => true,
+           'peladas' => Pelada::all()
        ], 201);
    }
 }
