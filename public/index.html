@@ -12,78 +12,94 @@
     <div id="app">
         <div class="container">
             <!-- Login -->
-            <form v-if="hasTokenValid" @submit.prevent="login" class="d-flex flex-column align-items-center">
+            <form v-if="!userAuthenticated" @submit.prevent="loginUser" class="d-flex mt-5 flex-column align-items-center">
                    <div class="row mt-3">
                        <h1>Login</h1>
                    </div>
 
+                   <div v-if="usuario.auth === false" class="row alert-danger text-center p-3">
+                        <p class="my-auto">{{ login.message }}</p>
+                   </div>
+
                     <div class="row col-md-6">
                         <div class="row mt-3 col-md-12 d-block">
-                            <label for="userEmail" class="text-primary" >E-mail:</label>
-                            <input type="email" class="form-control" v-model="usuario.email" name="userEmail" id="userEmail" required>
+                            <label for="userEmail" class="text-primary mb-2" >E-mail:</label>
+                            <input type="email" class="form-control" v-model="login.email" name="userEmail" id="userEmail" required>
                         </div>
 
                         <div class="row mt-3 col-md-12">
-                            <label for="userPassword" class="text-primary">Senha:</label>
-                            <input type="password" class="form-control" v-model="usuario.senha" name="userPassword" id="userPassword" required>
+                            <label for="userPassword" class="text-primary mb-2">Senha:</label>
+                            <input type="password" class="form-control" v-model="login.senha" name="userPassword" id="userPassword" required>
                             <button class="btn btn-outline-info mt-3 col-md-3">Entrar</button>
                         </div>
                     </div>
             </form>
 
             <!-- Cadastro -->
-
-            <form v-if="!hasTokenValid" @submit.prevent="login" class="d-flex flex-column align-items-center">
+            <form v-if="!userAuthenticated" @submit.prevent="registerUser" class="d-flex mt-5 flex-column align-items-center">
                 <div class="row mt-3">
                     <h1>Cadastro</h1>
                 </div>
 
+                <div v-if="cadastroUsuario.created" class="row col-md-6 alert-success text-center p-2 rounded">
+                        <p class="my-auto">{{ cadastroUsuario.message }}</p>
+                </div>
+
                  <div class="row col-md-6">
                      <div class="row mt-3 col-md-12 d-block">
-                         <label for="cadastroNomeCompleto" class="text-primary" >Nome completo:</label>
-                         <input type="email" class="form-control" v-model="usuario.nomeCompleto" name="cadastroNomeCompleto" id="cadastroNomeCompleto" required>
+                         <label for="cadastroNomeCompleto" class="text-primary mb-2" >Nome completo:</label>
+                         <input type="text" class="form-control" v-model="cadastroUsuario.nomeCompleto" name="cadastroNomeCompleto" id="cadastroNomeCompleto" required>
                      </div>
 
-                     <div class="row mt-3 col-md-12">
-                        <label for="cadastroEmail" class="text-primary">Email:</label>
-                        <input type="password" class="form-control" v-model="usuario.email" name="cadastroEmail" id="cadastroEmail" required>
+                     <div class="row mt-3 col-md-12 d-block">
+                        <label for="cadastroApelido" class="text-primary mb-2">Apelido:</label>
+                        <input type="text" class="form-control" v-model="cadastroUsuario.apelido" name="cadastroApelido" id="cadastroApelido" required>
                     </div>
 
                      <div class="row mt-3 col-md-12">
-                         <label for="cadastroPassword" class="text-primary">Senha:</label>
-                         <input type="password" class="form-control" v-model="usuario.senha" name="cadastroPassword" id="cadastroPassword" required>
-                         <button class="btn btn-outline-info mt-3 col-md-3">Cadastrar</button>
+                        <label for="cadastroEmail" class="text-primary mb-2">Email:</label>
+                        <input type="email" class="form-control" v-model="cadastroUsuario.email" name="cadastroEmail" id="cadastroEmail" required>
+                    </div>
+
+                     <div class="row mt-3 col-md-12">
+                         <label for="cadastroPassword" class="text-primary mb-2">Senha:</label>
+                         <input type="password" class="form-control" v-model="cadastroUsuario.senha" name="cadastroPassword" id="cadastroPassword" required>
+                         <button class="btn btn-outline-info mt-3 col-md-4">Cadastrar</button>
                      </div>
                  </div>
             </form>
 
             <!-- Cadastro de peladas -->
-
-            <form v-if="!hasTokenValid" @submit.prevent="login" class="d-flex flex-column align-items-center">
+            <form v-if="userAuthenticated" @submit.prevent="createPeladas" class="d-flex flex-column align-items-center">
                 <div class="row mt-3">
-                    <h1>Cadastrar pelada</h1>
+                    <h1>Agendar pelada</h1>
                 </div>
 
-                 <div class="row col-md-6">
+                <div v-if="criarPelada.created" class="row col-md-6 alert-success text-center p-2 rounded">
+                    <p class="my-auto">{{ criarPelada.message }}</p>
+                </div>
+
+                <div class="row col-md-6">
                      <div class="row mt-3 col-md-12 d-block">
-                         <label for="userEmail" class="text-primary">Nome do evento:</label>
-                         <input type="email" class="form-control" v-model="pelada.nomeEvento" name="userNomeCompleto" id="userNomeCompleto" required>
+                         <label for="eventName" class="text-primary mb-2 mb-2">Nome do evento:</label>
+                         <input type="text" class="form-control" v-model="criarPelada.nomeEvento" name="eventName" id="eventName" required>
                      </div>
 
                      <div class="row mt-3 col-md-12">
-                        <label for="userPassword" class="text-primary">Horario:</label>
-                        <input type="datetime-local" class="form-control" v-model="pelada.horario" name="userEmail" id="userEmail" required>
+                        <label for="setTime" class="text-primary mb-2 ">Horario:</label>
+                        <input type="datetime-local" class="form-control" v-model="criarPelada.horario" name="setTime" id="setTime" required>
                     </div>
 
                      <div class="row mt-3 col-md-12">
-                         <label for="userPassword" class="text-primary">Local:</label>
-                         <input type="password" class="form-control" v-model="pelada.local" name="userPassword" id="userPassword" required>
-                         <button class="btn btn-outline-info mt-3 col-md-3">Cadastrar</button>
+                         <label for="setLocale" class="text-primary mb-2">Local:</label>
+                         <input type="text" class="form-control" v-model="criarPelada.local" name="setLocale" id="setLocale" required>
+                         <button class="btn btn-outline-info mt-3 col-md-6 mx-auto">Agendar pelada</button>
                      </div>
                  </div>
             </form>
 
-            <table v-if="!hasTokenValid" class="table mt-5 text-center">
+            <table v-if="userAuthenticated" class="table mt-5 text-center">
+                <h1 class="text-center mt-5">Lista de peladas</h1>
                 <thead>
                   <tr>
                     <th scope="col" colspan="4"></th>
@@ -93,14 +109,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td colspan="4">Futcarro</td>
-                    <td colspan="4">12/08/2021 às 15:01</td>
-                    <td colspan="4">Rocketleague</td>
+
+                  <tr v-for="{idPelada, nomeEvento, data_hora, local} in verifyPeladas">
+                    <th scope="row">{{ idPelada }}</th>
+                    <td colspan="4">{{ nomeEvento }}</td>
+                    <td colspan="4">{{ data_hora }}</td>
+                    <td colspan="4">{{ local }}</td>
                   </tr>
                 </tbody>
-              </table>
+            </table>
 
             </div>
         </div>
@@ -113,17 +130,32 @@
         const vm = new Vue({
             el: "#app",
             data: {
-                usuario: {
-                    nomeCompleto: null,
+                apiUrl: 'http://localhost:8080/api',
+                login: {
                     email: null,
                     senha: null,
-                    token: 'a'
+                    message: ''
                 },
 
-                pelada: {
+                cadastroUsuario: {
+                    nomeCompleto: null,
+                    apelido: null,
+                    email: null,
+                    senha: null,
+                    created: false
+                },
+
+                usuario: {
+                    auth: null,
+                    token: ''
+                },
+
+                criarPelada: {
                     nomeEvento: null,
                     horario: null,
-                    local: null
+                    local: null,
+                    created: false,
+                    message: ''
                 },
 
                 peladas: {}
@@ -132,30 +164,90 @@
            computed: {
                 hasTokenValid() {
                     return (this.usuario.token.length > 0);
+                },
+
+                userAuthenticated() {
+                    return (typeof this.usuario.auth == "boolean" && this.usuario.auth);
+                },
+
+                verifyPeladas() {
+                    return this.peladas;
                 }
            },
 
            methods: {
-                login($event) {
-                    axios.post('http://localhost:8080/api/login', {email: this.usuario.email, senha: this.usuario.senha})
+                loginUser() {
+                    axios.post(this.apiUrl + '/login', {email: this.login.email, senha: this.login.senha})
                     .then(jsonResponse => {
-                        console.log('sucesso')
+                        if (!jsonResponse.data.auth) throw 'Usuário ou senha inválidos.';
+                        this.usuario.auth    = jsonResponse.data.auth;
+                        this.login.message = jsonResponse.data.message;
+                        this.usuario.token = jsonResponse.data.access_token;
+
+                        this.requestPeladas();
                     })
-                    .catch(error => console.log(error));
+                    .catch(error => {
+                        this.usuario.auth = false;
+                        this.login.message = error;
+                    });
 
                 },
 
-                consultar() {
-                    axios.get('http://localhost:8080/api/peladas')
-                    .then(jsonResponse => {
-                        console.log(jsonResponse);
-                    }).catch(error => {
-                        console.log('deu ruim');
+                registerUser() {
+                    let usuario = this.cadastroUsuario;
+
+                    axios.post(this.apiUrl + '/cadastro/usuario', {
+                        nomeCompleto: usuario.nomeCompleto,
+                        apelido: usuario.apelido,
+                        email: usuario.email,
+                        senha: usuario.senha
                     })
+                    .then(jsonResponse => {
+                        if (!jsonResponse) throw "Erro ao cadastrar";
+                        usuario.created = true;
+                        usuario.message = jsonResponse.data.msg;
+                    })
+                    .catch(error => console.log(error));
+                },
+
+                requestPeladas() {
+                    axios.get(this.apiUrl + '/peladas', {
+                        headers: {
+                            'Authorization': this.usuario.token
+                        }
+                    })
+                    .then(jsonResponse => {
+                        this.peladas = JSON.parse(jsonResponse.request.response);
+                    })
+                    .catch(error =>console.log('deu ruim'));
+                },
+
+                createPeladas() {
+                    let rawPeladas =
+                    {
+                        nomeEvento: this.criarPelada.nomeEvento,
+                        data_hora: this.criarPelada.horario,
+                        local: this.criarPelada.local
+                    };
+
+                    axios.post(this.apiUrl + '/cadastro/pelada', rawPeladas,
+                    {
+                        headers: {
+                            'Authorization': this.usuario.token
+                        }
+                    }
+                    )
+                    .then(jsonResponse => {
+                        if (!jsonResponse) throw "Erro ao cadastrar";
+                        this.criarPelada.created = true;
+                        this.criarPelada.message = 'Pelada criada com sucesso';
+                    })
+                    .catch(error => console.log(error));
                 }
             }
         });
 
+        console.log(vm);
     </script>
 
     <style scoped>
