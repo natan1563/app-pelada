@@ -7,3 +7,4 @@
 - Importar base de dados (api/database/app_pelada) para o seu SGBD 
 - Subir o servidor de banco de dados.
 - Rodar o comando: ``php artisan migrate``
+- Rodar os comandos: ``cd ..``  ``php -S localhost:8080 -t public``
