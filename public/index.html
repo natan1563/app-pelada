@@ -105,19 +105,19 @@
                 <h1 class="text-center mt-5">Lista de peladas</h1>
                 <thead>
                   <tr>
-                    <th scope="col" colspan="4"></th>
-                    <th scope="col" colspan="4">Pelada</th>
-                    <th scope="col" colspan="4">Agendado para</th>
-                    <th scope="col" colspan="4">Onde será</th>
+                    <th scope="col"></th>
+                    <th scope="col">Pelada</th>
+                    <th scope="col">Agendado para</th>
+                    <th scope="col">Onde será</th>
                   </tr>
                 </thead>
                 <tbody>
 
                   <tr v-for="{idPelada, nomeEvento, data_hora, local} in verifyPeladas">
                     <th scope="row">{{ idPelada }}</th>
-                    <td colspan="4">{{ nomeEvento }}</td>
-                    <td colspan="4">{{ data_hora }}</td>
-                    <td colspan="4">{{ local }}</td>
+                    <td>{{ nomeEvento }}</td>
+                    <td>{{ data_hora }}</td>
+                    <td>{{ local }}</td>
                   </tr>
                 </tbody>
             </table>
