@@ -11,7 +11,7 @@ class PeladaController extends Controller
 
    public function index()
    {
-       return response()->json(Pelada::all());
+       return response()->json(Pelada::orderBy('idPelada', 'DESC')->get());
    }
 
    public function store(Request $request)
@@ -26,7 +26,7 @@ class PeladaController extends Controller
 
        return response()->json([
            'pelada_criada' => true,
-           'peladas' => Pelada::all()
+           'peladas' => Pelada::orderBy('idPelada', 'DESC')->get()
        ], 201);
    }
 }
