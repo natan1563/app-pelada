@@ -70,7 +70,7 @@
             </form>
 
             <!-- Cadastro de peladas -->
-            <form v-if="userAuthenticated || !usuario.auth" @submit.prevent="createPeladas" class="d-flex flex-column align-items-center">
+            <form v-if="userAuthenticated || usuario.auth" @submit.prevent="createPeladas" class="d-flex flex-column align-items-center">
 
                 <div class="row mt-3">
                     <h1>Agendar pelada</h1>
@@ -101,26 +101,27 @@
                  </div>
             </form>
 
-            <table v-if="userAuthenticated || !usuario.auth" class="table mt-5 text-center">
+            <div v-if="userAuthenticated || usuario.auth" >
                 <h1 class="text-center mt-5">Lista de peladas</h1>
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Pelada</th>
-                    <th scope="col">Agendado para</th>
-                    <th scope="col">Onde será</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <tr v-for="{idPelada, nomeEvento, data_hora, local} in verifyPeladas">
-                    <th scope="row">{{ idPelada }}</th>
-                    <td>{{ nomeEvento }}</td>
-                    <td>{{ data_hora }}</td>
-                    <td>{{ local }}</td>
-                  </tr>
-                </tbody>
-            </table>
+                <table class="table mt-5 text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Pelada</th>
+                        <th scope="col">Agendado para</th>
+                        <th scope="col">Onde será</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="{idPelada, nomeEvento, data_hora, local} in verifyPeladas">
+                        <th scope="row">{{ idPelada }}</th>
+                        <td>{{ nomeEvento }}</td>
+                        <td>{{ data_hora }}</td>
+                        <td>{{ local }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             </div>
         </div>
@@ -186,6 +187,13 @@
                 verifyPeladas() {
                     return this.peladas;
                 }
+           },
+
+           created: function() {
+                if (localStorage.getItem('Auth') == 'true') {
+                    this.usuario.auth = true
+                    this.requestPeladas();
+                };
            },
 
            methods: {
