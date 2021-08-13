@@ -22,3 +22,12 @@ If you discover a security vulnerability within Lumen, please send an e-mail to 
 ## License
 
 The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Comandos após download
+
+- rodar ``cd api``
+- rodar ``composer update``
+- verificar credenciais no .env
+- importar base de dados (api/database/app_pelada)
+- rodar ``php artisan migrate``
+- (com o banco funcionando) php artisan migrate 

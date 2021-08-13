@@ -17,18 +17,19 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => '/api'], function() use ($router) {
+$router->group(['prefix' => '/api', 'middleware' => 'cors'], function() use ($router) {
 
     $router->post('login', 'UsuarioController@login');
 
     $router->post('cadastro/usuario', 'UsuarioController@store');
 
-    $router->get('peladas', 'PeladaController@index');
-    $router->group(['middleware' => 'autenticador'], function () use ($router) {
+    $router->group(['middleware' => 'autenticador', 'cors'], function () use ($router) {
 
         $router->post('cadastro/pelada', 'PeladaController@store');
 
         $router->post('vinculo/pelada', 'PeladaUsuarioController@store');
+
+        $router->get('peladas', 'PeladaController@index');
 
         $router->put('vinculo/pelada/{id}', 'PeladaUsuarioController@update');
 
