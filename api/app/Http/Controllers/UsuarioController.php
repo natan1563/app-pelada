@@ -48,7 +48,7 @@ class UsuarioController extends Controller
             $usuario->senha        = Hash::make($request->senha);
 
             $usuario->save();
-            return response()->json('Usuario criado com sucesso', 201);
+            return response()->json(['msg' => 'Usuario criado com sucesso'], 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);
         }
